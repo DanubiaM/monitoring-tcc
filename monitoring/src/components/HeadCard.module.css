@@ -1,0 +1,58 @@
+@import-normalize;
+@import url('https://fonts.googleapis.com/css2?family=Jost&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amaranth&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+.card{
+    background-color:cadetblue ;
+    align-items:center;
+	display:flex;
+	flex-direction:row;
+	height: 90px;
+	width: 20%;
+    background-image: linear-gradient(135deg, #fff 0%, #fff 93%, rgba(0,0,0,0) 93%, rgba(0,0,0,0) 100%);
+}
+
+.card_icon{
+    background-color:cadetblue ;
+    align-items: center;
+	display: flex;
+	height:100%;
+    justify-content: space-around;
+	padding:0;
+	text-align:center;
+	width:40%;
+}
+.card_body{
+    color:#4b4b4b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #fff;
+    margin: 0;
+    width: 50%;
+}
+
+.card_body p{
+    font-size:1.25rem;
+	font-family: Amaranth, Arial;
+	margin:0;	
+	padding: 10px 0px;
+	text-align:center;
+    padding: 0;
+
+}
+
+.card_value{
+    font-family: Jost, arial;
+	font-size: 0.9rem;
+	font-weight: bolder;
+	text-align:center;
+	word-wrap: break-word;
+    margin: 0;
+}
+.card_value p{
+    font-family: Roboto, arial;
+	font-size: 1.5rem;
+}
