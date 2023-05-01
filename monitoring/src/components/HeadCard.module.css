@@ -4,17 +4,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 .card{
-    background-color:cadetblue ;
     align-items:center;
 	display:flex;
 	flex-direction:row;
 	height: 90px;
 	width: 20%;
     background-image: linear-gradient(135deg, #fff 0%, #fff 93%, rgba(0,0,0,0) 93%, rgba(0,0,0,0) 100%);
-}
 
+}
+.red {
+    background-color: #c72c41;
+
+}
+.blue{
+    background-color: #83cacd;
+
+}
+.green{
+    background-color: #008F4E;
+
+}
+.cyan{
+    background-color: #0f9ea8;
+
+}
 .card_icon{
-    background-color:cadetblue ;
     align-items: center;
 	display: flex;
 	height:100%;
