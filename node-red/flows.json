@@ -1,0 +1,91 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "ad7d2c225faaa0a4",
+        "type": "websocket-listener",
+        "path": "/data-clp",
+        "wholemsg": "false"
+    },
+    {
+        "id": "8c9709e7ba80fe0f",
+        "type": "websocket out",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "server": "ad7d2c225faaa0a4",
+        "client": "",
+        "x": 530,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "036a01719383c008",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 90,
+        "y": 80,
+        "wires": [
+            [
+                "a6465ef8d2a79f21"
+            ]
+        ]
+    },
+    {
+        "id": "a6465ef8d2a79f21",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "function 1",
+        "func": "var produzido = generateValue(300,799);\nvar meta = 800;  \nvar data = {\"meta\":meta,\n            \"produzido\": produzido,\n            \"eficiencia\":(produzido/meta)*100,\n            \"rendimento_operacional\": \"11:\" + generateValue(0,59),\n            \"alimentador\": generateValue(0,2000),\n            \"taxa_separador_magnetico\": generateValue(0, 2000),\n            \"balanca_entrada\": generateValue(0,50000),\n            \"balanca_saida\": generateValue(0, 50000),\n            \"balanca_perca\": generateValue(0, 50000),\n            \"temp_sm1\": generateValue(0,100),\n            \"temp_sm2\": generateValue(0, 100),\n            \"temp_sm3\": generateValue(0, 100)\n    };\n\nmsg.payload = JSON.stringify(data);\n\nreturn msg;\n\nfunction generateValue(min, max){\n    return Math.floor(Math.random() * (max - min)) + min;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 140,
+        "wires": [
+            [
+                "8c9709e7ba80fe0f",
+                "228be2b0e999e605"
+            ]
+        ]
+    },
+    {
+        "id": "228be2b0e999e605",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 240,
+        "wires": []
+    }
+]
