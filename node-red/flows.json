@@ -7,76 +7,407 @@
         "info": ""
     },
     {
-        "id": "ad7d2c225faaa0a4",
-        "type": "websocket-listener",
-        "path": "/data-clp",
-        "wholemsg": "false"
-    },
-    {
-        "id": "8c9709e7ba80fe0f",
-        "type": "websocket out",
+        "id": "4a51143d91f643f2",
+        "type": "modbus-read",
         "z": "f6f2187d.f17ca8",
-        "name": "",
-        "server": "ad7d2c225faaa0a4",
-        "client": "",
-        "x": 530,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "036a01719383c008",
-        "type": "inject",
-        "z": "f6f2187d.f17ca8",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "10",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 90,
-        "y": 80,
+        "name": "Dado CLP: Meta",
+        "topic": "Meta",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "3",
+        "quantity": "1",
+        "rate": "3000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "8d7d77cc2a66df9d",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 140,
+        "y": 60,
         "wires": [
             [
-                "a6465ef8d2a79f21"
-            ]
+                "22c182e979e18fc7",
+                "d2dd6e0a6c9d0d1f"
+            ],
+            []
         ]
     },
     {
-        "id": "a6465ef8d2a79f21",
+        "id": "46dbee726b7397eb",
+        "type": "modbus-read",
+        "z": "f6f2187d.f17ca8",
+        "name": "Dado CLP: Rendimento Operacional",
+        "topic": "Rendimento_operacional",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "7",
+        "quantity": "1",
+        "rate": "3000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "8d7d77cc2a66df9d",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 200,
+        "y": 180,
+        "wires": [
+            [
+                "d2dd6e0a6c9d0d1f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e7663f9ddef289d5",
         "type": "function",
         "z": "f6f2187d.f17ca8",
-        "name": "function 1",
-        "func": "var produzido = generateValue(300,799);\nvar meta = 800;  \nvar data = {\"meta\":meta,\n            \"produzido\": produzido,\n            \"eficiencia\":(produzido/meta)*100,\n            \"rendimento_operacional\": \"11:\" + generateValue(0,59),\n            \"alimentador\": generateValue(0,2000),\n            \"taxa_separador_magnetico\": generateValue(0, 2000),\n            \"balanca_entrada\": generateValue(0,50000),\n            \"balanca_saida\": generateValue(0, 50000),\n            \"balanca_perca\": generateValue(0, 50000),\n            \"temp_sm1\": generateValue(0,100),\n            \"temp_sm2\": generateValue(0, 100),\n            \"temp_sm3\": generateValue(0, 100)\n    };\n\nmsg.payload = JSON.stringify(data);\n\nreturn msg;\n\nfunction generateValue(min, max){\n    return Math.floor(Math.random() * (max - min)) + min;\n}",
+        "name": "Calculo Eficiencia",
+        "func": "var meta = msg.payload.meta;\nvar produzido = msg.payload.produzido;\n\nvar eficiencia = (parseInt(produzido)*100)/meta;\nmsg.topic = \"eficiencia\";\nmsg.payload = eficiencia;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 280,
-        "y": 140,
+        "x": 630,
+        "y": 80,
         "wires": [
             [
-                "8c9709e7ba80fe0f",
-                "228be2b0e999e605"
+                "d2dd6e0a6c9d0d1f"
             ]
         ]
     },
     {
-        "id": "228be2b0e999e605",
+        "id": "22c182e979e18fc7",
+        "type": "join",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 450,
+        "y": 80,
+        "wires": [
+            [
+                "e7663f9ddef289d5"
+            ]
+        ]
+    },
+    {
+        "id": "a38e95ec5ded341e",
+        "type": "modbus-read",
+        "z": "f6f2187d.f17ca8",
+        "name": "Dado CLP: Alimentador",
+        "topic": "Alimentador",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "10",
+        "quantity": "1",
+        "rate": "3000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "8d7d77cc2a66df9d",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 160,
+        "y": 240,
+        "wires": [
+            [
+                "d2dd6e0a6c9d0d1f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d8ad9ca7ca5484ad",
+        "type": "modbus-read",
+        "z": "f6f2187d.f17ca8",
+        "name": "Dado CLP: Taxa Separador Magnetico",
+        "topic": "tx_separador_magnetico",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "12",
+        "quantity": "1",
+        "rate": "3000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "8d7d77cc2a66df9d",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 210,
+        "y": 300,
+        "wires": [
+            [
+                "d2dd6e0a6c9d0d1f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e0242920ee5c37ca",
+        "type": "modbus-read",
+        "z": "f6f2187d.f17ca8",
+        "name": "Dado CLP: Balanca Entrada",
+        "topic": "Balanca_Entrada",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "14",
+        "quantity": "1",
+        "rate": "3000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "8d7d77cc2a66df9d",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 180,
+        "y": 360,
+        "wires": [
+            [
+                "d2dd6e0a6c9d0d1f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "3c2e439f21390532",
+        "type": "modbus-read",
+        "z": "f6f2187d.f17ca8",
+        "name": "Dado CLP: Balanca Saida",
+        "topic": "Balanca_Saida",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "16",
+        "quantity": "1",
+        "rate": "3000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "8d7d77cc2a66df9d",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 170,
+        "y": 420,
+        "wires": [
+            [
+                "d2dd6e0a6c9d0d1f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e609774fd3c220cc",
+        "type": "modbus-read",
+        "z": "f6f2187d.f17ca8",
+        "name": "Dado CLP: Balanca Perca",
+        "topic": "Balanca_Perca",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "18",
+        "quantity": "1",
+        "rate": "3000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "8d7d77cc2a66df9d",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 170,
+        "y": 480,
+        "wires": [
+            [
+                "d2dd6e0a6c9d0d1f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "1e061da0075c9d3f",
+        "type": "modbus-read",
+        "z": "f6f2187d.f17ca8",
+        "name": "Dado CLP: Temperatura SM1",
+        "topic": "Temp_sm1",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "20",
+        "quantity": "1",
+        "rate": "3000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "8d7d77cc2a66df9d",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 180,
+        "y": 540,
+        "wires": [
+            [
+                "d2dd6e0a6c9d0d1f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "5cecbb36d30a1358",
+        "type": "modbus-read",
+        "z": "f6f2187d.f17ca8",
+        "name": "Dado CLP: Temperatura SM2",
+        "topic": "Temp_sm2",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "22",
+        "quantity": "1",
+        "rate": "3000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "8d7d77cc2a66df9d",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 180,
+        "y": 600,
+        "wires": [
+            [
+                "d2dd6e0a6c9d0d1f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "0db5f1d8185d092a",
+        "type": "modbus-read",
+        "z": "f6f2187d.f17ca8",
+        "name": "Dado CLP: Temperatura SM3",
+        "topic": "Temp_sm3",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "24",
+        "quantity": "1",
+        "rate": "3000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "8d7d77cc2a66df9d",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 180,
+        "y": 660,
+        "wires": [
+            [
+                "d2dd6e0a6c9d0d1f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d2dd6e0a6c9d0d1f",
+        "type": "join",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "13",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 730,
+        "y": 320,
+        "wires": [
+            [
+                "d64911e08e376a4b",
+                "c15b7c4c4c0ca417"
+            ]
+        ]
+    },
+    {
+        "id": "d64911e08e376a4b",
         "type": "debug",
         "z": "f6f2187d.f17ca8",
-        "name": "debug 1",
+        "name": "debug 2",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -84,8 +415,79 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 520,
+        "x": 860,
         "y": 240,
         "wires": []
+    },
+    {
+        "id": "c15b7c4c4c0ca417",
+        "type": "websocket out",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "x": 930,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "836abdac0baecedc",
+        "type": "modbus-read",
+        "z": "f6f2187d.f17ca8",
+        "name": "Dado CLP: Produzido",
+        "topic": "Produzido",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "HoldingRegister",
+        "adr": "5",
+        "quantity": "1",
+        "rate": "3000",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "8d7d77cc2a66df9d",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 160,
+        "y": 120,
+        "wires": [
+            [
+                "22c182e979e18fc7",
+                "d2dd6e0a6c9d0d1f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8d7d77cc2a66df9d",
+        "type": "modbus-client",
+        "name": "CLP",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "queueLogEnabled": false,
+        "failureLogEnabled": true,
+        "tcpHost": "127.0.0.1",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "serialAsciiResponseStartDelimiter": "0x3A",
+        "unit_id": "1",
+        "commandDelay": "1",
+        "clientTimeout": "1000",
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": "2000",
+        "parallelUnitIdsAllowed": true,
+        "showWarnings": true,
+        "showLogs": true
     }
 ]
